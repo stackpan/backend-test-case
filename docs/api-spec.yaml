@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: Books API
+  description: Project for backend technical test for PT Eigen Tri Metheta
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000/api'
+tags:
+  - name: Book
+  - name: Member
+paths:
+  /books:
+    get:
+      description: 'Show all existing books.'
+      tags:
+        - Book
+      responses:
+        200:
+          description: 'Success.'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Success.'
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Book'
+  /books/{bookCode}:
+    get:
+      description: 'Find a book'
+      tags:
+        - Book
+      parameters:
+        - $ref: '#/components/parameters/BookCodePath'
+      responses:
+        200:
+          description: 'Found.'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - properties:
+                      data:
+                        $ref: '#/components/schemas/Book'
+        404:
+          $ref: '#/components/responses/404NotFound'
+  /books/{bookCode}/borrow:
+    post:
+      description: 'Borrow a book'
+      tags:
+        - Book
+      parameters:
+        - $ref: '#/components/parameters/BookCodePath'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                memberCode:
+                  type: string
+                  required: true
+      responses:
+        201:
+          description: 'Success create borrowing book data.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404NotFound'
+  /books/{bookCode}/return:
+    post:
+      description: 'Return a book'
+      tags:
+        - Book
+      parameters:
+        - $ref: '#/components/parameters/BookCodePath'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                memberCode:
+                  type: string
+                  required: true
+      responses:
+        201:
+          description: 'Success create borrowing book data.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404NotFound'
+  /members:
+    get:
+      description: 'Show all exisiting members'
+      tags:
+        - Member
+      responses:
+        200:
+          description: 'Success.'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BaseResponse'
+                  - properties:
+                      data:
+                        type: array
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/Member'
+                            - properties:
+                                borrowedBooksTotal:
+                                  type: number
+components:
+  responses:
+    400BadRequest:
+      description: 'Bad Request.'
+      content:
+        application/json:
+          schema:
+            allOf:
+              - properties:
+                  status:
+                    type: string
+                    required: true
+              - $ref: '#/components/schemas/BaseResponse'
+    404NotFound:
+      description: 'Resource not found.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BaseResponse'
+  parameters:
+    BookCodePath:
+      in: path
+      name: bookCode
+      required: true
+      schema:
+        type: string
+  schemas:
+    BaseResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          required: true
+    Book:
+      type: object
+      properties:
+        code:
+          type: string
+          required: true
+        title:
+          type: string
+          required: true
+        author:
+          type: string
+          required: true
+        stock:
+          type: number
+          required: true
+    Member:
+      type: object
+      properties:
+        code:
+          type: string
+          required: true
+        name:
+          type: string
+          required: true
+    BorrowedBook:
+      type: object
+      properties:
+        code:
+          type: string
+          required: true
+        title:
+          type: string
+          required: true
+        author:
+          type: string
+          required: true
+        amount:
+          type: number
+          required: true

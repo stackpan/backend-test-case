@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mariadb:
+    image: 'mariadb:lts'
+    restart: on-failure
+    ports:
+      - '3306:3306'
+    environment:
+      MARIADB_ROOT_PASSWORD: '${DATABASE_ROOT_PASSWORD:-admin}'
+      MARIADB_USER: '${DATABASE_USER:-user}'
+      MARIADB_PASSWORD: '${DATABASE_PASSWORD:-secret}'
+      MARIADB_DATABASE: '${DATABASE_NAME:-app}'
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d
+volumes:
+  db-data:
+    driver: local
