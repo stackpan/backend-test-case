@@ -1,5 +1,5 @@
 import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
-import { Book } from './book.entity';
+import { Book } from '../books/book.entity';
 
 @Entity({ name: 'members' })
 export class Member {
@@ -16,4 +16,7 @@ export class Member {
     inverseJoinColumn: { name: 'book_code', referencedColumnName: 'code' },
   })
   books: Book[];
+
+  @Column({ name: 'end_penalty_at' })
+  endPenaltyAt: Date | null;
 }

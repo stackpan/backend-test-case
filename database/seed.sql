@@ -1,3 +1,7 @@
+DROP TABLE book_member_borrows;
+DROP TABLE books;
+DROP TABLE members;
+
 INSERT INTO books (code, title, author, stock)
 VALUES ('JK-45', 'Harry Potter', 'J.K Rowling', 1),
        ('SHR-1', 'A Study in Scarlet', 'Arthur Conan Doyle', 1),

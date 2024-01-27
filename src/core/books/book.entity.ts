@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryColumn } from 'typeorm';
-import { Member } from './member.entity';
+import { Member } from '../members/member.entity';
 
 @Entity({ name: 'books' })
 export class Book {

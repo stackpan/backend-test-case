@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import configuration from './config/configuration';
-import { Book } from './entity/book.entity';
-import { Member } from './entity/member.entity';
-import { MemberModule } from './module/member.module';
+import { Book } from './core/books/book.entity';
+import { Member } from './core/members/member.entity';
+import { MemberModule } from './core/members/member.module';
+import { BookModule } from './core/books/book.module';
+import { BookMemberBorrow } from './core/books/book-member-borrow.entity';
 
 @Module({
   imports: [
@@ -21,10 +23,11 @@ import { MemberModule } from './module/member.module';
       port: configuration().database.port,
       username: configuration().database.user,
       password: configuration().database.password,
-      database: configuration().database.password,
-      entities: [Book, Member],
+      database: configuration().database.name,
+      entities: [Book, Member, BookMemberBorrow],
     }),
     MemberModule,
+    BookModule,
   ],
   controllers: [],
   providers: [],
